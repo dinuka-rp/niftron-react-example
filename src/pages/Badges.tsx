@@ -2,6 +2,7 @@ import { NIFTRON, NiftronAssetResponse } from "niftron-sdk";
 import React, { useState } from "react";
 
 const Badges = () => {
+  const [issuer, setIssuer] = useState<string>();
   const [assetCode, setAssetCode] = useState<string>();
   const [niftrons, setNiftrons] = useState<number>();
 
@@ -19,6 +20,7 @@ const Badges = () => {
       const res: NiftronAssetResponse | null = await NIFTRON.user.getNiftronCreditBalance();
       console.log(res);
       if (res) {
+        setIssuer(res.issuer);
         setAssetCode(res.assetCode);
         setNiftrons(res.balance);
       }
@@ -32,9 +34,12 @@ const Badges = () => {
       <div>Welcome to Share A Badge</div>
 
       {assetCode && niftrons && (
-        <div>
-          {assetCode}: {niftrons}
-        </div>
+        <>
+          <div>Issuer: {issuer}</div>
+          <div>
+            {assetCode}: {niftrons}
+          </div>
+        </>
       )}
       <button onClick={testSDK}>testSDK</button>
       <button onClick={getBalance}>Get Account Balance</button>
