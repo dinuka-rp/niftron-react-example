@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { NiftronConfig, NIFTRON } from "niftron-sdk";
 
 const niftronConfig: NiftronConfig = {
-  projectKey: "GDARTMGVSZDL7OZETKWBI32STTBIEJJVNK5PM2V4TV53CNAENXNGSES4",
+  projectKey: process.env.REACT_APP_PROJECT_KEY,
   secretKey: process.env.REACT_APP_DEV_SECRET_KEY,
 };
 

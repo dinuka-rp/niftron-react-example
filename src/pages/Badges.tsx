@@ -1,48 +1,65 @@
-import { NIFTRON, NiftronAssetResponse } from "niftron-sdk";
 import React, { useState } from "react";
+import { CreateBadgeModel, NIFTRON, Token, TokenType } from "niftron-sdk";
 
 const Badges = () => {
-  const [issuer, setIssuer] = useState<string>();
-  const [assetCode, setAssetCode] = useState<string>();
-  const [niftrons, setNiftrons] = useState<number>();
+  const [tokens, setTokens] = useState<any>();
 
-  const testSDK = async () => {
+  const createBadgeModel: CreateBadgeModel = {
+    tokenName: "CBS2020",
+    tokenType: TokenType.SFT,
+    tokenData: JSON.stringify({ Organizer: "Niftron" }),
+    tokenCount: 10,
+    previewImageUrl: "https://i.ibb.co/VqWSJ2k/CBS-2020.png",
+  };
+
+  const createBadge = async () => {
     try {
-      const res: any = await NIFTRON.user.testTransfer();
+      const res = await NIFTRON.tokenBuilder.createBadge(createBadgeModel);
       console.log(res);
     } catch (e) {
-      console.log("error", e);
+      console.log(e);
     }
   };
 
-  const getBalance = async () => {
+  const getTokens = async () => {
     try {
-      const res: NiftronAssetResponse | null = await NIFTRON.user.getNiftronCreditBalance();
-      console.log(res);
+      const res: Token[] | null = await NIFTRON.user.getTokensByPublicKey();
       if (res) {
-        setIssuer(res.issuer);
-        setAssetCode(res.assetCode);
-        setNiftrons(res.balance);
+        console.log(res);
+        setTokens(res);
       }
     } catch (e) {
-      console.log("error", e);
+      console.log(e);
     }
   };
+
+  const transferBadge = async () => {};
 
   return (
     <div>
-      <div>Welcome to Share A Badge</div>
+      <button onClick={createBadge}>Create Badge</button>
 
-      {assetCode && niftrons && (
-        <>
-          <div>Issuer: {issuer}</div>
-          <div>
-            {assetCode}: {niftrons}
-          </div>
-        </>
-      )}
-      <button onClick={testSDK}>testSDK</button>
-      <button onClick={getBalance}>Get Account Balance</button>
+      <button onClick={getTokens}>Get Created Tokens/ Badges</button>
+
+      <div>
+        <div>All Tokens/ Badges</div>
+        {tokens &&
+          tokens.map((item: any, index: any) => {
+            return (
+              <div
+                key={`token-${index}`}
+                style={{ display: "inline-block", border: "1px solid #ccc" }}
+              >
+                <div>Name: {item.tokenName}</div>
+                <div>Type: {item.tokenType}</div>
+                <div>Code: {item.assetCode}</div>
+                <div>Count: {item.assetCount}</div>
+
+                {/* <button onClick={tranferBadge}>Transfer Badge</button> */}
+              </div>
+            );
+          })}
+      </div>
     </div>
   );
 };
