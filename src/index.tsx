@@ -3,6 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { NiftronConfig, NIFTRON } from "niftron-sdk";
+
+const niftronConfig: NiftronConfig = {
+  projectKey: "GDARTMGVSZDL7OZETKWBI32STTBIEJJVNK5PM2V4TV53CNAENXNGSES4",
+  secretKey: process.env.REACT_APP_DEV_SECRET_KEY,
+};
+
+const niftron: NIFTRON = new NIFTRON(niftronConfig);
+
+niftron.initialize()
 
 ReactDOM.render(
   <React.StrictMode>
